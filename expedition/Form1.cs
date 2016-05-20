@@ -46,7 +46,14 @@ namespace expedition
             }
             catch (NpgsqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                if (ex.Code.Equals("28P01"))
+                {
+                    MessageBox.Show("Nu blev lösenordet fel");
+                }
+                else
+                {
+                    MessageBox.Show(ex.Code);
+                }
             }
             //finally
             //{
