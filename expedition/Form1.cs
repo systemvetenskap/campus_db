@@ -78,5 +78,15 @@ namespace expedition
             conn.Close();
 
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Postgres db = new Postgres();
+            List<Fjälltopp> toppar = new List<Fjälltopp>();
+            toppar = db.HämtaFjälltopp();
+            listBox1.DataSource = toppar;
+
+
+        }
     }
 }
