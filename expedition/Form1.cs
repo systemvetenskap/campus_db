@@ -88,5 +88,11 @@ namespace expedition
 
 
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Postgres db = new Postgres();
+            db.TestaTransaktion();
+        }
     }
 }

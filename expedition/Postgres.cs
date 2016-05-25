@@ -22,6 +22,21 @@ namespace expedition
             _conn.Open();
             _tabell = new DataTable();
         }
+
+        private void sqlNonQuery(string sql)
+        {
+            try
+            {
+                _cmd = new NpgsqlCommand(sql, _conn);
+                _cmd.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+            }
+
+        }
+
         private DataTable sqlFråga(string sql)
         {
             try
@@ -52,10 +67,10 @@ namespace expedition
 
                 return _tabell;
             }
-            finally
-            {
-                _conn.Close();
-            }
+            //finally
+            //{
+            //    _conn.Close();
+            //}
         }
 
 
@@ -66,7 +81,7 @@ namespace expedition
         /// <returns>Lista med fjälltoppar</returns>
         public List<Fjälltopp> HämtaFjälltopp()
         {
-            string sql = "select id as \"ft.id\", höjd as \"ft.höjd\", namn as \"ft.namn\" from fjälltopgp ft";
+            string sql = "select id as \"ft.id\", höjd as \"ft.höjd\", namn as \"ft.namn\" from fjälltopp ft";
             _tabell = sqlFråga(sql);
 
             List<Fjälltopp> toppar = new List<Fjälltopp>();
@@ -93,6 +108,20 @@ namespace expedition
             //    toppar.Add(topp);
             //}
             return toppar;
+        }
+        public void TestaTransaktion()
+        {
+            string sql;
+            sqlNonQuery("begin");
+            sql = "select 1 from person where id=2 for update";
+            sqlNonQuery(sql);
+            sql = "update person set  förnamn='Erik' where id=2";
+            sqlNonQuery(sql);
+            sql = "select id as \"ft.id\", höjd as \"ft.höjd\", namn as \"ft.namn\" from fjälltopp ft";
+            _tabell = sqlFråga(sql);
+            //sqlNonQuery("commit");
+            //_conn.Close();
+
         }
     }
 }
